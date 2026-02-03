@@ -1,0 +1,111 @@
+{
+  "project": "OpenClaw Admin Panel",
+  "branchName": "ralph/agent-management",
+  "description": "The Agent Management System provides the primary interface for managing OpenClaw AI agents. It displays a scrollable list of all configured agents in a left sidebar and enables core operations like creating, deleting, duplicating, and renaming agents.",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Display agent list in sidebar",
+      "description": "As an admin, I want to see all configured agents in sidebar so I can navigate between them.",
+      "acceptanceCriteria": [
+        "Sidebar displays agent name with icon/avatar",
+        "Each agent shows skill count badge (e.g., '0 skills', '5 skills')",
+        "List is scrollable when 5+ agents exist",
+        "Active agent is highlighted with accent color (#3b82f6)",
+        "Agent list sorted alphabetically by default",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 1,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-002",
+      "title": "Create new agent",
+      "description": "As an admin, I want to create a new agent so I can set up a specialized AI assistant.",
+      "acceptanceCriteria": [
+        "New Agent button in sidebar header",
+        "Opens modal/dialog with name input field",
+        "Agent name required and validated (no duplicates)",
+        "Default configuration applied (Potato preset, no skills)",
+        "New agent appears in list immediately",
+        "New agent becomes active/selected after creation",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 2,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-003",
+      "title": "Delete agent",
+      "description": "As an admin, I want to delete an agent I no longer need to clean up system.",
+      "acceptanceCriteria": [
+        "Delete option accessible via context menu or agent options menu",
+        "Confirmation dialog: 'Are you sure you want to delete [agent name]?'",
+        "Cannot delete if agent is currently running/active",
+        "Agent config file removed from ~/.openclaw/agents/",
+        "Sidebar updates immediately after deletion",
+        "Next agent in list becomes selected",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 3,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-004",
+      "title": "Duplicate agent",
+      "description": "As an admin, I want to clone an existing agent so I can quickly create similar agents with same permissions.",
+      "acceptanceCriteria": [
+        "Duplicate option accessible via context menu or agent options menu",
+        "Prompts for new agent name",
+        "Copies all configuration: name, description, skills, tools, memory scope",
+        "New agent appears in list immediately",
+        "Duplicated agent becomes active/selected",
+        "Original agent remains unchanged",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 4,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-005",
+      "title": "Rename agent",
+      "description": "As an admin, I want to rename an agent so I can update its identity as roles change.",
+      "acceptanceCriteria": [
+        "Rename option accessible via context menu or agent options menu",
+        "Opens modal with current name pre-filled",
+        "Name required and validated (no duplicates with other agents)",
+        "Updates both display name and config file name",
+        "Sidebar updates immediately with new name",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 5,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-006",
+      "title": "Show agent selection state",
+      "description": "As an admin, I want to see which agent is currently selected so I know which configuration I'm viewing.",
+      "acceptanceCriteria": [
+        "Selected agent highlighted with blue accent (#3b82f6)",
+        "Selection persists across tab changes",
+        "Clicking agent updates selection state immediately",
+        "Only one agent can be selected at a time",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 6,
+      "passes": false,
+      "notes": ""
+    }
+  ]
+}

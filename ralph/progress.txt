@@ -1,0 +1,27 @@
+# Ralph Progress Tracker
+
+## Project: OpenClaw Admin Panel
+## Branch: ralph/agent-management
+
+---
+
+## Completed Stories
+
+None yet.
+
+---
+
+## In Progress
+
+None.
+
+---
+
+## Pending
+
+- US-001: Display agent list in sidebar
+- US-002: Create new agent
+- US-003: Delete agent
+- US-004: Duplicate agent
+- US-005: Rename agent
+- US-006: Show agent selection state
