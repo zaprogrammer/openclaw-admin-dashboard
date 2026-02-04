@@ -6,8 +6,8 @@
   "branchName": "ralph/agent-config-tabs",
   "status": "in-progress",
   "createdAt": "2026-02-04T01:37:47+01:00",
-  "updatedAt": "2026-02-04T02:04:17+01:00",
-  "iterations": 4,
+  "updatedAt": "2026-02-04T02:44:08+01:00",
+  "iterations": 5,
   "tasks": [],
   "completedTasks": [],
   "lastTool": "opencode",
@@ -173,7 +173,5 @@
       ],
       "passes": false
     }
-  ]
-}
   ]
 }
