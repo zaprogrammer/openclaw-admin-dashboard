@@ -6,8 +6,8 @@
   "branchName": "ralph/agent-config-tabs",
   "status": "in-progress",
   "createdAt": "2026-02-04T01:37:47+01:00",
-  "updatedAt": "2026-02-04T01:46:49+01:00",
-  "iterations": 1,
+  "updatedAt": "2026-02-04T02:04:17+01:00",
+  "iterations": 4,
   "tasks": [],
   "completedTasks": [],
   "lastTool": "opencode",
@@ -48,7 +48,7 @@
     {
       "id": "US-003",
       "title": "Soul tab content",
-      "description": "As an admin, I want to configure agent personality and identity in the Soul tab so the agent has appropriate behavior and tone.",
+      "description": "As an admin, I want to configure agent personality and identity in Soul tab so the agent has appropriate behavior and tone.",
       "acceptanceCriteria": [
         "Name field: Text input for agent name",
         "Description field: Textarea for agent personality and behavioral instructions",
@@ -59,7 +59,7 @@
         "Typecheck passes",
         "Verify in browser using dev-browser skill"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "US-004",

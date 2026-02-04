@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Tabs, { TabId } from '@/components/Tabs';
 import SoulTab from '@/components/SoulTab';
+import UserTab from '@/components/UserTab';
 import { Agent } from '@/types/agent';
 
 function HomeContent() {
@@ -40,12 +41,7 @@ function HomeContent() {
       case 'soul':
         return <SoulTab agent={agent} onSave={handleAgentSave} />;
       case 'user':
-        return (
-          <div className="p-6 animate-in fade-in duration-150">
-            <h2 className="text-xl font-semibold mb-4">User Context</h2>
-            <p className="text-[#6b7280]">Configure which user context/profile the agent can access.</p>
-          </div>
-        );
+        return <UserTab agent={agent} onSave={handleAgentSave} />;
       case 'agents':
         return (
           <div className="p-6 animate-in fade-in duration-150">

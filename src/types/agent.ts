@@ -13,6 +13,11 @@ export interface Agent {
     scope?: string[];
     deny?: string[];
   };
+  user?: {
+    enabled: boolean;
+    scope: 'all' | 'specific' | 'none';
+    files?: string[];
+  };
 }
 
 export interface Tool {
