@@ -20,6 +20,9 @@
 - Use `useCallback` for functions in useEffect dependencies to avoid infinite loops
 - PUT endpoints: use request body for data (e.g., currentName, newName), return updated entity
 - Rename validation: exclude current entity from duplicate check when renaming
+- URL-based state: use useSearchParams() + router.push({ scroll: false }) for navigation state that should be shareable/linkable
+- Suspense boundary: wrap client components using useSearchParams to prevent Next.js build errors
+- Animation utilities: Tailwind provides animate-in, fade-in, slide-in, zoom-in with duration-[N] classes
 
 ---
 
@@ -218,4 +221,47 @@ Started: Wed Feb  4 01:37:47 CET 2026
   - TypeScript types exported from component for use in parent (TabId type)
   - Build and lint both pass successfully
   - Dev-browser skill available but had some compatibility issues, manual HTML verification worked
+---
+
+--- Iteration 1 (Wed Feb  4 01:46:49 CET 2026) ---
+ create mode 100644 ralph/.last-prd
+ create mode 100644 ralph/.ralph-state/agent_config_tabs.json
+ create mode 100644 ralph/.ralph-state/agent_management.json
+ create mode 100644 ralph/.ralph-state/bulk_operations.json
+ create mode 120000 ralph/.ralph-state/current-prd.json
+ create mode 100644 ralph/.ralph-state/documentation.json
+ create mode 100644 ralph/.ralph-state/gateway_integration.json
+ create mode 100644 ralph/.ralph-state/monitoring_dashboard.json
+ create mode 100644 ralph/.ralph-state/security_access_control.json
+ create mode 100644 ralph/.ralph-state/skills_management.json
+ create mode 100644 ralph/.ralph-state/testing_framework.json
+ create mode 100644 ralph/.ralph-state/tool_access_control.json
+ create mode 120000 ralph/current-prd.json
+ mode change 100644 => 120000 ralph/prd.json
+ create mode 100644 ralph/prd.json~Updated upstream
+ create mode 100755 ralph/ralph-v2.sh
+ create mode 100644 src/components/Tabs.tsx
+
+[93m[1m| [0m[90m Todo     [0m0 todos
+US-001 completed successfully. Implemented tab navigation with 6 tabs (Soul, User, Agents, Memory, Tools, Skills), proper styling, and placeholder content areas. All acceptance criteria met. Build and lint pass.
+
+## 2026-02-04 - US-002
+- What was implemented:
+  - Added URL query parameter support for tab navigation using useRouter and useSearchParams
+  - Wrapped useSearchParams in Suspense boundary to prevent Next.js build error
+  - Implemented smooth transition animation (150ms fade) using Tailwind's animate-in fade-in duration-150 classes
+  - Added handleTabChange function to update both state and URL with router.push and { scroll: false }
+  - Tab state syncs with URL parameter: accessing page with ?tab=soul automatically loads Soul tab
+  - Browser back/forward navigation works correctly with URL-based tab state
+  - Extracted page content into HomeContent component to wrap in Suspense
+- Files changed:
+  - `src/app/page.tsx` (modified)
+- **Learnings for future iterations:**
+  - useSearchParams() must be wrapped in a Suspense boundary to prevent "missing-suspense-with-csr-bailout" error
+  - Next.js App Router requires Suspense around client components that use useSearchParams
+  - router.push() with { scroll: false } prevents page scroll on tab changes
+  - Tab state should be single source of truth: initialize from URL param, update both state and URL on change
+  - Tailwind supports animation utilities like animate-in, fade-in with duration-[N] classes (N in milliseconds)
+  - React virtual DOM detaches elements on re-renders, so need to re-fetch button elements after navigation in Playwright
+  - Browser verification: dev-browser skill successfully tested all navigation features (click tabs, URL updates, back/forward, direct URL with query params)
 ---
