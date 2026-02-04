@@ -68,6 +68,23 @@ Batch convert all PRDs and exit:
 ./ralph-v2.sh --convert --tool claude
 ```
 
+### Single PRD Mode
+Work on a specific PRD only (instead of processing all PRDs):
+```bash
+./ralph-v2.sh --single agent-config-tabs --tool claude 20
+```
+
+The PRD name can be:
+- The filename without extension (e.g., `agent-config-tabs`)
+- The safe name from `.ralph-state/` (e.g., `agent_config_tabs`)
+- With or without `.json` extension
+
+### Status Dashboard
+Show all PRDs and their progress:
+```bash
+./ralph-v2.sh --status
+```
+
 ## Complete Workflow
 
 ```bash
@@ -81,8 +98,12 @@ Batch convert all PRDs and exit:
 ./ralph-v2.sh --convert --tool claude  # batch via script
 # OR just skip this — ralph-v2.sh auto-converts on run
 
-# 3. Run the agent loop (works through all PRDs sequentially)
+# 3. Run the agent loop
+# Option A: Process all PRDs sequentially (default)
 ./ralph-v2.sh --tool claude 20
+
+# Option B: Work on a single PRD only
+./ralph-v2.sh --single agent-config-tabs --tool claude 20
 ```
 
 ## Directory Structure
@@ -105,12 +126,36 @@ tasks/
 ralph/prd-*.md             # Alternative PRD location
 ```
 
+## Execution Modes
+
+### Batch Mode (Default)
+The agent works through all PRDs sequentially:
+```bash
+./ralph-v2.sh --tool claude 20
+```
+
+When a PRD completes, it automatically switches to the next pending PRD.
+
+### Single PRD Mode
+Work on one specific PRD only:
+```bash
+./ralph-v2.sh --single agent-config-tabs --tool claude 20
+```
+
+When the specified PRD completes, the agent exits (doesn't move to next PRD).
+
+### Status Check
+View all PRDs and their current status:
+```bash
+./ralph-v2.sh --status
+```
+
 ## Key Points
 
 - **Single authoring**: `/prd` generates one PRD at a time with questions
 - **Batch conversion**: `/ralph` can convert multiple PRDs to JSON at once
 - **Auto-conversion**: The agent loop auto-converts PRDs before starting
-- **Sequential execution**: The agent works through PRDs one by one
+- **Flexible execution**: Process all PRDs sequentially or focus on one at a time
 
 ## See Also
 
