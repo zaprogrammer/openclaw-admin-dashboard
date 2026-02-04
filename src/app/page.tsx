@@ -3,12 +3,21 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Tabs, { TabId } from '@/components/Tabs';
+import SoulTab from '@/components/SoulTab';
+import { Agent } from '@/types/agent';
 
 function HomeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const tabParam = searchParams.get('tab') as TabId;
   const [activeTab, setActiveTab] = useState<TabId>('tools');
+  const [agent, setAgent] = useState<Agent>({
+    name: 'saul-goodman',
+    description: '',
+    systemPrompt: '',
+    skills: { enabled: [] },
+    tools: { enabled: [], disabled: [] },
+  });
 
   useEffect(() => {
     if (tabParam && ['soul', 'user', 'agents', 'memory', 'tools', 'skills'].includes(tabParam)) {
@@ -21,15 +30,15 @@ function HomeContent() {
     router.push(`?tab=${tabId}`, { scroll: false });
   };
 
+  const handleAgentSave = (updatedAgent: Agent) => {
+    setAgent(updatedAgent);
+    console.log('Agent saved:', updatedAgent);
+  };
+
   const renderTabContent = () => {
     switch (activeTab) {
       case 'soul':
-        return (
-          <div className="p-6 animate-in fade-in duration-150">
-            <h2 className="text-xl font-semibold mb-4">Soul Configuration</h2>
-            <p className="text-[#6b7280]">Configure agent personality and identity.</p>
-          </div>
-        );
+        return <SoulTab agent={agent} onSave={handleAgentSave} />;
       case 'user':
         return (
           <div className="p-6 animate-in fade-in duration-150">

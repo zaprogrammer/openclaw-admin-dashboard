@@ -1,6 +1,7 @@
 export interface Agent {
   name: string;
   description?: string;
+  systemPrompt?: string;
   skills: {
     enabled: string[];
   };
