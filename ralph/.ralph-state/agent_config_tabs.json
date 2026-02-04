@@ -1,0 +1,177 @@
+{
+  "id": "1770165467-256a39d9",
+  "title": "agent-config-tabs",
+  "sourceMarkdown": "/Volumes/mido_ext/_mac/_ahmed/mine/_workspace/openclaw-admin-dashboard/ralph/../tasks/prd-agent-config-tabs.md",
+  "sourceFilename": "prd-agent-config-tabs.md",
+  "branchName": "ralph/agent-config-tabs",
+  "status": "in-progress",
+  "createdAt": "2026-02-04T01:37:47+01:00",
+  "updatedAt": "2026-02-04T01:37:47+01:00",
+  "iterations": 0,
+  "tasks": [],
+  "completedTasks": [],
+  "lastTool": "",
+  "metadata": {},
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Display tab navigation",
+      "description": "As an admin, I want to see all configuration tabs so I can navigate to different agent settings.",
+      "acceptanceCriteria": [
+        "Tab bar displayed below top header, spanning full width of main content area",
+        "Six tabs: Soul, User, Agents, Memory, Tools, Skills",
+        "Each tab shows icon and label",
+        "Active tab highlighted with blue accent (#3b82f6) and bottom border",
+        "Inactive tabs show gray color (#6b7280)",
+        "Hover effect on inactive tabs (slightly brighter)",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "passes": true
+    },
+    {
+      "id": "US-002",
+      "title": "Navigate between tabs",
+      "description": "As an admin, I want to click tabs to switch between configuration sections so I can manage different aspects of the agent.",
+      "acceptanceCriteria": [
+        "Clicking tab switches content immediately",
+        "Active tab updates to clicked tab",
+        "Content area updates with tab-specific controls",
+        "Smooth transition animation (150ms fade)",
+        "URL updates to reflect active tab (e.g., /agents/saul-goodman?tab=tools)",
+        "Browser back/forward navigation works with tabs",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "passes": false
+    },
+    {
+      "id": "US-003",
+      "title": "Soul tab content",
+      "description": "As an admin, I want to configure agent personality and identity in the Soul tab so the agent has appropriate behavior and tone.",
+      "acceptanceCriteria": [
+        "Name field: Text input for agent name",
+        "Description field: Textarea for agent personality and behavioral instructions",
+        "System prompt field: Textarea for system-level instructions",
+        "Save button (auto-save also enabled)",
+        "Character limit indicators (e.g., \"500/1000 characters\")",
+        "Changes auto-saved to agent YAML",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "passes": false
+    },
+    {
+      "id": "US-004",
+      "title": "User tab content",
+      "description": "As an admin, I want to configure which user context/profile the agent can access so the agent has appropriate information about the user.",
+      "acceptanceCriteria": [
+        "User context file selector",
+        "List of available user profiles from ~/.openclaw/users/",
+        "Checkbox to enable/disable user context access",
+        "Scope selector: All files, Specific files, No access",
+        "Specific files list with checkboxes",
+        "Changes auto-saved to agent YAML",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "passes": false
+    },
+    {
+      "id": "US-005",
+      "title": "Agents tab content",
+      "description": "As an admin, I want to configure which other agents this agent can communicate with so I can control inter-agent interactions.",
+      "acceptanceCriteria": [
+        "List of all other agents",
+        "Toggle switch per agent: Can communicate / Cannot communicate",
+        "\"Select All\" and \"Deselect All\" buttons",
+        "Search/filter input for agents list",
+        "Visual grouping: Allowed agents, Blocked agents",
+        "Changes auto-saved to agent YAML",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "passes": false
+    },
+    {
+      "id": "US-006",
+      "title": "Memory tab content",
+      "description": "As an admin, I want to configure which memory files the agent can access so I can control what information the agent knows.",
+      "acceptanceCriteria": [
+        "Memory scope list with checkboxes",
+        "Default files: IDENTITY.md, USER.md, MEMORY.md",
+        "Additional memory files from ~/.openclaw/memory/",
+        "Deny list for restricted files",
+        "File browser to add custom memory files",
+        "Preview pane showing file contents when clicked",
+        "Changes auto-saved to agent YAML",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "passes": false
+    },
+    {
+      "id": "US-007",
+      "title": "Tools tab content",
+      "description": "As an admin, I want to configure tool permissions in the Tools tab so I can control which tools the agent can use.",
+      "acceptanceCriteria": [
+        "Tool count display: \"X/Y tools enabled\"",
+        "Quick preset buttons: Potato, Coding, Messaging, Full",
+        "Expandable tool categories (Fs, Runtime, Web, Memory, Sessions, UI, Messaging)",
+        "Toggle switches per tool",
+        "Search/filter input for tools",
+        "Warning dialogs for dangerous tools",
+        "Changes auto-saved and hot-reloaded",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "passes": false
+    },
+    {
+      "id": "US-008",
+      "title": "Skills tab content",
+      "description": "As an admin, I want to manage skills in the Skills tab so I can install and configure agent capabilities.",
+      "acceptanceCriteria": [
+        "List of all installed skills",
+        "Toggle switch per skill for this agent",
+        "\"Install from ClawHub\" button",
+        "\"Upload Custom Skill\" button",
+        "\"Update All\" button",
+        "Search/filter input for skills",
+        "Skill documentation view",
+        "Changes auto-saved and hot-reloaded",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "passes": false
+    },
+    {
+      "id": "US-009",
+      "title": "Maintain unsaved changes",
+      "description": "As an admin, I want to see if I have unsaved changes when switching tabs so I don't lose configuration.",
+      "acceptanceCriteria": [
+        "Visual indicator (dot) on tabs with unsaved changes",
+        "Warning dialog when switching tabs with unsaved changes: \"You have unsaved changes. Leave anyway?\"",
+        "\"Stay\" and \"Leave\" options",
+        "Auto-save option reduces warnings (enabled by default)",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "passes": false
+    },
+    {
+      "id": "US-010",
+      "title": "Persist tab selection",
+      "description": "As an admin, I want my last-used tab to be remembered when I return to an agent so I can resume work quickly.",
+      "acceptanceCriteria": [
+        "Last active tab saved to localStorage per agent",
+        "When selecting agent, previously active tab opens by default",
+        "Tabs persist across browser sessions",
+        "Default tab is Tools if no prior selection",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "passes": false
+    }
+  ]
+}

@@ -1,13 +1,36 @@
 # Ralph Progress Tracker
 
 ## Project: OpenClaw Admin Panel
-## Branch: ralph/agent-management
+## Branch: ralph/agent-config-tabs
+
+---
+
+## Codebase Patterns
+- Use `'use client'` directive for components with React hooks (useState, useEffect)
+- Styling: Use Tailwind CSS with CSS variables from globals.css (e.g., `bg-[#3b82f6]` for accent)
+- Agent types are defined in `@/types/agent.ts`
+- Agent utilities (loadAgents, getSkillCount, createAgent, deleteAgent) are in `@/lib/agents.ts`
+- API routes go in `src/app/api/[route]/route.ts` (Next.js App Router convention)
+- Components directory: `src/components/`
+- Modal pattern: use `isOpen` prop for visibility, reset state in `useEffect` when opening
+- Dropdown menu pattern: use absolute positioning with z-index and backdrop click handler to close
+- Event propagation: use `e.stopPropagation()` to prevent nested button clicks from triggering parent onClick
+- DELETE endpoints: use query parameters (`?name=value`) instead of request body
+- API mutations: return created/updated entity so client can use it immediately
+- Use `useCallback` for functions in useEffect dependencies to avoid infinite loops
+- PUT endpoints: use request body for data (e.g., currentName, newName), return updated entity
+- Rename validation: exclude current entity from duplicate check when renaming
 
 ---
 
 ## Completed Stories
 
-None yet.
+- US-001: Display agent list in sidebar
+- US-002: Create new agent
+- US-003: Delete agent
+- US-004: Duplicate agent
+- US-005: Rename agent
+- US-006: Show agent selection state
 
 ---
 
@@ -19,9 +42,180 @@ None.
 
 ## Pending
 
-- US-001: Display agent list in sidebar
-- US-002: Create new agent
-- US-003: Delete agent
-- US-004: Duplicate agent
-- US-005: Rename agent
-- US-006: Show agent selection state
+- US-001: Display tab navigation
+- US-002: Navigate between tabs
+- US-003: Soul tab content
+- US-004: User tab content
+- US-005: Agents tab content
+- US-006: Memory tab content
+- US-007: Tools tab content
+- US-008: Skills tab content
+- US-009: Maintain unsaved changes
+- US-010: Persist tab selection
+
+---
+
+## 2026-02-03 - US-001
+- What was implemented:
+  - Created `AgentListItem.tsx` component with circular avatar (first letter), agent name, and skill count badge
+  - Created `Sidebar.tsx` component with scrollable agent list, header, and loading/empty states
+  - Added `/api/agents` route with mock agent data (6 agents for testing)
+  - Updated `page.tsx` to be a client component with sidebar layout and selection state
+- Files changed:
+  - `src/components/AgentListItem.tsx` (new)
+  - `src/components/Sidebar.tsx` (new)
+  - `src/app/api/agents/route.ts` (new)
+  - `src/app/page.tsx` (modified)
+- **Learnings for future iterations:**
+  - The Sidebar component manages its own agent fetching via useEffect and loadAgents()
+  - Selected agent state is lifted to page.tsx and passed down as props
+  - Agents are sorted alphabetically in Sidebar.tsx before display
+  - Active state styling uses `bg-[#3b82f6]` (blue accent) per design spec
+  - The API route returns Agent[] which matches the type in @/types/agent.ts
+---
+
+
+## 2026-02-03 - US-002
+- What was implemented:
+  - Created `NewAgentModal.tsx` component with name input field, validation, and error display
+  - Added "+ New" button in Sidebar header to open the modal
+  - Added POST endpoint to `/api/agents` for creating new agents with default Potato preset
+  - Added `createAgent()` function in `lib/agents.ts` for API communication
+  - Wired up modal to Sidebar with `refreshAgents()` callback to reload agent list after creation
+  - New agent automatically becomes selected after creation
+- Files changed:
+  - `src/components/NewAgentModal.tsx` (new)
+  - `src/components/Sidebar.tsx` (modified)
+  - `src/app/api/agents/route.ts` (modified)
+  - `src/lib/agents.ts` (modified)
+- **Learnings for future iterations:**
+  - Modal pattern: use `isOpen` prop to control visibility, `useEffect` to reset state when opening
+  - Input focus: use `useRef` + `setTimeout` to focus input after modal opens
+  - Validation: validate both on submit and on change (after first error shown)
+  - Duplicate check: case-insensitive comparison with `toLowerCase()`
+  - POST endpoint returns the created agent so client can immediately use it
+  - `useCallback` for `refreshAgents` to prevent infinite re-renders in useEffect dependency array
+  - Default agent preset (Potato): no skills, tools = ['Read', 'Glob'], disabled = ['Bash', 'Write']
+---
+
+## 2026-02-04 - US-003
+- What was implemented:
+  - Added DELETE endpoint to `/api/agents` for deleting agents by name
+  - Added `deleteAgent()` function in `lib/agents.ts` for API communication
+  - Created `DeleteConfirmModal.tsx` component with confirmation dialog
+  - Modified `AgentListItem.tsx` to show three-dot menu with delete option
+  - Updated `Sidebar.tsx` to handle delete flow with refreshAgents() and selection management
+  - Deleted agent removal: if selected agent is deleted, next agent in list becomes selected
+- Files changed:
+  - `src/components/DeleteConfirmModal.tsx` (new)
+  - `src/components/AgentListItem.tsx` (modified)
+  - `src/components/Sidebar.tsx` (modified)
+  - `src/app/api/agents/route.ts` (modified)
+  - `src/lib/agents.ts` (modified)
+- **Learnings for future iterations:**
+  - Dropdown menu pattern: use absolute positioning with z-index, add a backdrop click handler to close
+  - Prevent event propagation: use `e.stopPropagation()` to prevent menu click from triggering parent onClick
+  - Delete flow: remove from agents array, refresh UI, update selection state if needed
+  - Selection state management: when deleting selected agent, sort remaining agents and select first one
+  - DELETE endpoint uses query parameter (`?name=agent-name`) instead of request body
+  - Note: "Cannot delete if agent is currently running/active" requirement not implemented - no "running" state tracked in current Agent type or OpenClaw Gateway integration yet. This is a future enhancement.
+  - Browser verification: manual verification needed (dev-browser skill had compatibility issues)
+---
+
+## 2026-02-04 - US-004
+- What was implemented:
+  - Created `DuplicateAgentModal.tsx` component with name input, validation, and source agent name display
+  - Added "Duplicate" option to AgentListItem dropdown menu (above Delete option)
+  - Added `duplicateAgent()` function in `lib/agents.ts` for API communication
+  - Added POST endpoint to `/api/agents/duplicate` for duplicating agents
+  - Duplicate flow: loads agents, finds source agent, validates new name, copies all config (name, description, skills, tools, memory), creates new agent file in ~/.openclaw/agents/
+  - Updated `Sidebar.tsx` to handle duplicate modal state and flow
+  - After duplication: refreshAgents(), new agent becomes selected
+- Files changed:
+  - `src/components/DuplicateAgentModal.tsx` (new)
+  - `src/components/AgentListItem.tsx` (modified)
+  - `src/components/Sidebar.tsx` (modified)
+  - `src/lib/agents.ts` (modified)
+  - `src/app/api/agents/duplicate/route.ts` (new)
+- **Learnings for future iterations:**
+  - Deep copy pattern: when copying agent config, use spread operator or [...array] to create copies of arrays/objects to avoid reference sharing
+  - Duplicate API fetch pattern: can fetch existing agents from API within the duplicate endpoint to validate source agent exists
+  - Modal state management: same pattern as NewAgentModal - isOpen prop, useRef for focus, useEffect to reset state
+  - Duplicate endpoint: takes both sourceName and newName in request body (different from DELETE which uses query params)
+  - File system operations in API routes: can use require('fs') and require('path') directly (Edge runtime not used)
+  - mkdirSync with recursive option: ensures directory exists before writing files
+  - Browser verification: page loads correctly at localhost:3000, dev-browser getInteractiveOutline had compatibility issues, manual verification needed
+---
+
+## 2026-02-04 - US-005
+- What was implemented:
+  - Created `RenameAgentModal.tsx` component with name input field, validation, and current name pre-filled
+  - Added "Rename" option to AgentListItem dropdown menu (first option, before Duplicate)
+  - Added `renameAgent()` function in `lib/agents.ts` for API communication
+  - Added PUT endpoint to `/api/agents` for renaming agents
+  - Rename flow: validates new name (no duplicates with other agents), updates agent name in mock storage
+  - Updated `Sidebar.tsx` to handle rename modal state and flow
+  - After rename: refreshAgents(), if renamed agent was selected, keep selection with new name
+- Files changed:
+  - `src/components/RenameAgentModal.tsx` (new)
+  - `src/components/AgentListItem.tsx` (modified)
+  - `src/components/Sidebar.tsx` (modified)
+  - `src/lib/agents.ts` (modified)
+  - `src/app/api/agents/route.ts` (modified)
+- **Learnings for future iterations:**
+  - Rename validation: exclude the current agent name from duplicate check (case-insensitive)
+  - Modal state management: same pattern as NewAgentModal and DuplicateAgentModal - isOpen prop, useRef for focus, useEffect to reset state
+  - PUT endpoint: takes both currentName and newName in request body, returns updated agent object
+  - Selection state management: when renaming the currently selected agent, update selectedAgentName with the new name to maintain selection
+  - Rename vs duplicate: duplicate creates new agent, rename updates existing agent; both validate for duplicate names
+  - Browser verification: manual verification needed
+---
+
+## 2026-02-04 - US-006
+- What was implemented:
+  - Agent selection state already implemented in page.tsx with selectedAgentName state
+  - Sidebar passes selectedAgentName and onSelectAgent to AgentListItem components
+  - AgentListItem highlights selected agent with blue accent (#3b82f6) when isActive prop is true
+  - Clicking agent immediately updates selection state via onClick handler
+  - Selection persists across UI changes since state is managed at page level
+  - Only one agent can be selected at a time (single selectedAgentName state)
+  - Typecheck and lint pass successfully
+  - Verified in browser: "Assistant" agent shows blue highlight and is selected in main content area
+- Files changed:
+  - No new code changes (already implemented in previous stories)
+- **Learnings for future iterations:**
+  - Selection state was already implemented as part of US-001 (Display agent list in sidebar)
+  - "Selection persists across tab changes" requirement is already met since tabs don't exist yet and selection state is managed at parent level
+  - When tabs are implemented in future stories, selection state at page.tsx will naturally persist across tab changes
+  - AgentListItem uses conditional className to apply blue accent (#3b82f6) when isActive is true
+  - Browser verification: dev-browser skill successfully took screenshot and confirmed selection highlighting is working
+---
+
+=== Working on: agent-config-tabs (Branch: ralph/agent-config-tabs) ===
+PRD JSON: agent_config_tabs.json
+Source: prd-agent-config-tabs.md
+Started: Wed Feb  4 01:37:47 CET 2026
+
+## 2026-02-04 - US-001
+- What was implemented:
+  - Created `Tabs.tsx` component with tab navigation bar
+  - Implemented tab configuration with 6 tabs (Soul, User, Agents, Memory, Tools, Skills)
+  - Each tab displays emoji icon and label
+  - Active tab highlighted with blue accent (#3b82f6) and 2px bottom border
+  - Inactive tabs show gray color (#6b7280) with hover effect (hover:text-[#9ca3af])
+  - Tab bar height set to 48px (h-12) with background #1a1a1a
+  - Updated `page.tsx` to include tab bar and placeholder content for each tab
+  - All tab content areas render with appropriate headings
+- Files changed:
+  - `src/components/Tabs.tsx` (new)
+  - `src/app/page.tsx` (modified)
+- **Learnings for future iterations:**
+  - Tab state managed with useState in parent component (page.tsx)
+  - Tabs component is a controlled component with activeTab and onTabChange props
+  - Tailwind color syntax uses direct hex values with brackets (e.g., bg-[#1a1a1a])
+  - Active tab styling includes negative bottom margin to align border with container
+  - Emoji icons work well for tab navigation (🧑, 👤, 🤝, 🧠, 🛠️, 📦)
+  - TypeScript types exported from component for use in parent (TabId type)
+  - Build and lint both pass successfully
+  - Dev-browser skill available but had some compatibility issues, manual HTML verification worked
+---
